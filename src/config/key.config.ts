@@ -14,4 +14,6 @@ export default {
   S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
   S3_SECRET_KEY: process.env.S3_SECRET_KEY,
   S3_BUCKET_REGION: process.env.S3_BUCKET_REGION,
+  CLIENT_URL: process.env.CLIENT_URL,
+  COOKIE_SECRET: process.env.COOKIE_SECRET,
 };

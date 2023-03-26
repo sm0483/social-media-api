@@ -1,9 +1,11 @@
 {
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "extends": ["plugin:@typescript-eslint/recommended"],
     "env": {
         "browser": true,
         "es2021": true
     },
-    "extends": "standard-with-typescript",
     "overrides": [
     ],
     "parserOptions": {
@@ -11,6 +13,8 @@
         "sourceType": "module"
     },
     "rules": {
-        "no-console":"warn"
+        "no-console":["error", { "allow": ["error", "warn"] }],
+        "@typescript-eslint/no-explicit-any": "off"
+
     }
 }

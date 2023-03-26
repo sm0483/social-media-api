@@ -3,6 +3,7 @@ import cors from 'cors';
 import key from './config/key.config';
 import express from 'express';
 import 'express-async-errors';
+import cookieParser from 'cookie-parser';
 
 // Config
 import connectDb from './api/config/db.config';
@@ -17,18 +18,23 @@ class App {
   public port: number;
 
   constructor(routes: any[], start: string) {
+    this.port = key.PORT as number;
     this.app = express();
     this.start = start;
-    this.initRoutes(routes);
     this.initDb();
-    this.port = key.PORT as number;
     this.initMiddleware();
+    this.initRoutes(routes);
+    this.initErrorHandler();
   }
 
   private initMiddleware = () => {
-    this.app.use(cors());
     this.app.use(morgan('dev'));
+    this.app.use(cors());
+    this.app.use(cookieParser());
     this.app.use(express.json());
+  };
+
+  private initErrorHandler = () => {
     this.app.use(pageNotFound);
     this.app.use(errorHandler);
   };
@@ -45,7 +51,7 @@ class App {
 
   public listen = () => {
     this.app.listen(this.port, () =>
-      console.log(`connected to port ${this.port}`)
+      console.error(`connected to port ${this.port}`)
     );
   };
 }

@@ -6,6 +6,7 @@ import IRequestWithFileAndUser from '../interfaces/vendors/IRequestWithFileAndUs
 import JwtOperation from '../utils/jwt.utils';
 import AuthServices from '../services/auth.services';
 import { ParsedQs } from 'qs';
+import key from '../../config/key.config';
 
 class AuthControllers {
   private jwtOperations = new JwtOperation();
@@ -24,21 +25,22 @@ class AuthControllers {
     if (!authGuards.hasValidAuth(userInfo))
       throw new CustomError('Invalid user info ', StatusCodes.BAD_REQUEST);
 
-    const checkUser = await this.authServices.checkUser(userInfo as any);
+    const checkUser = await this.authServices.checkUser(userInfo);
     let id: null | string = '';
-    if (checkUser) id = (checkUser as any)._id;
+    if (checkUser) id = checkUser?._id.toString();
 
-    let userLogin: boolean = true;
+    let userLogin = true;
     if (!checkUser) {
-      const response = await this.authServices.createUser(userInfo as any);
+      const response = await this.authServices.createUser(userInfo);
       userLogin = false;
       if (!authGuards.hasValidUserResponse(response))
         throw new CustomError('Invalid user response', StatusCodes.BAD_GATEWAY);
 
       id = response._id;
     }
-    const token = this.jwtOperations.createJwt({ id });
-    res.status(StatusCodes.OK).json({ userLogin, token });
+    const token = this.jwtOperations.createJwt({ id, userLogin });
+    this.authServices.attachCookie(token, res);
+    res.redirect(key.CLIENT_URL);
   };
 }
 

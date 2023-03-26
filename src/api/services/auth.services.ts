@@ -3,17 +3,18 @@ import key from '../../config/key.config';
 import User from '../models/user.models';
 import CustomError from '../utils/customError.utils';
 import { StatusCodes } from 'http-status-codes';
+import { Response } from 'express';
 
 class AuthServices {
-  public async getUrl() {
+  public getUrl = () => {
     const url = auth.generateAuthUrl({
       access_type: 'offline',
       scope: ['profile', 'email'],
     });
     return url;
-  }
+  };
 
-  public async getUserInfo(code: string) {
+  public getUserInfo = async (code: string) => {
     const tokens = (await auth.getToken(code)).tokens;
     if (!tokens)
       throw new CustomError('Invalid token', StatusCodes.INTERNAL_SERVER_ERROR);
@@ -26,22 +27,32 @@ class AuthServices {
     } catch (err) {
       throw new CustomError('Invalid token', StatusCodes.INTERNAL_SERVER_ERROR);
     }
-  }
+  };
 
-  public async checkUser(userInfo: any) {
+  public checkUser = async (userInfo: any) => {
     const checkUser = await User.findOne({
       email: userInfo.email,
     });
     return checkUser;
-  }
+  };
 
-  public async createUser(userInfo: any) {
+  public createUser = async (userInfo: any) => {
     const response = await User.create({
       name: userInfo.name,
       email: userInfo.email,
+      profileImage: userInfo.picture,
     });
     return response;
-  }
+  };
+
+  public attachCookie = (token: string, res: Response) => {
+    res.cookie('token', token, {
+      httpOnly: false,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      secure: false,
+      signed: false,
+    });
+  };
 }
 
 export default AuthServices;

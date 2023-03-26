@@ -9,7 +9,7 @@ const verifyToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token = req.cookies.token;
   if (!token) {
     throw new CustomError('Token not present', StatusCodes.UNAUTHORIZED);
   }
