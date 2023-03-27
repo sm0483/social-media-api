@@ -5,12 +5,14 @@ import { v4 as uuid } from 'uuid';
 import keys from '../../config/key.config';
 import fs from 'fs';
 import { Readable } from 'stream';
-import { DeleteObjectOutput, PutObjectOutput } from 'aws-sdk/clients/s3';
+import { DeleteObjectOutput } from 'aws-sdk/clients/s3';
 
 class Storage {
-  public async uploadImage(path: string): Promise<string | CustomError> {
+  public async uploadImage(
+    path: string,
+    key: string
+  ): Promise<string | CustomError> {
     try {
-      const key: string = uuid();
       const readStream = fs.createReadStream(path);
       const response = await storage
         .upload({

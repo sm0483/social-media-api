@@ -16,4 +16,5 @@ export default {
   S3_BUCKET_REGION: process.env.S3_BUCKET_REGION,
   CLIENT_URL: process.env.CLIENT_URL,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
+  SERVER_DOMAIN:process.env.SERVER_DOMAIN
 };

@@ -5,6 +5,7 @@ interface IRequestWithFileAndUser extends Request {
   user?: {
     id: string;
   };
+  data?: object;
 }
 
 export default IRequestWithFileAndUser;

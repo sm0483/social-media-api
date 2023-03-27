@@ -9,10 +9,10 @@ class JwtOperation {
     return token;
   }
 
-  public isTokenValid(token: string): boolean {
+  public isTokenValid(token: string): boolean | object {
     try {
-      jwt.verify(token, tokenConfig.TOKEN_KEY);
-      return true;
+      const response = jwt.verify(token, tokenConfig.TOKEN_KEY);
+      return response;
     } catch (err) {
       return false;
     }
