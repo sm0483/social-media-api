@@ -21,7 +21,7 @@ class Storage {
           Body: readStream,
         })
         .promise();
-
+      fs.unlinkSync(path);
       return response.Key;
     } catch (err) {
       throw new CustomError(err.message, StatusCodes.INTERNAL_SERVER_ERROR);
