@@ -46,13 +46,15 @@ class AuthServices {
   };
 
   public attachCookie = (token: string, res: Response) => {
-    res.cookie('token', token, {
+    res.cookie('refreshToken', token, {
       httpOnly: false,
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       secure: false,
       signed: false,
     });
   };
+
+
 }
 
 export default AuthServices;

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import UserController from '../controllers/user.controllers';
 import { IRoute } from '../interfaces/vendors/IRoutes';
 import upload from '../utils/multer.utils';
-import verifyToken from '../middlewares/auth.middleware';
+import verifyAccessToken from '../middlewares/verifyAccess.middlewares';
 
 class AuthRoute implements IRoute {
   public router: Router = Router();
@@ -14,10 +14,14 @@ class AuthRoute implements IRoute {
   }
 
   private initRoutes() {
-    this.router.get(`${this.path}`, verifyToken, this.userController.getUser);
+    this.router.get(
+      `${this.path}`,
+      verifyAccessToken,
+      this.userController.getUser
+    );
     this.router.patch(
       `${this.path}`,
-      verifyToken,
+      verifyAccessToken,
       upload.single('profileImage'),
       this.userController.editUser
     );

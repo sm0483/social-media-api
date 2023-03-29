@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import ImageController from '../controllers/image.controller';
 import { IRoute } from '../interfaces/vendors/IRoutes';
-import verifyToken from '../middlewares/auth.middleware';
+import verifyAccessToken from '../middlewares/verifyAccess.middlewares';
 
 class AuthRoute implements IRoute {
   public router: Router = Router();
@@ -15,7 +15,7 @@ class AuthRoute implements IRoute {
   private initRoutes() {
     this.router.get(
       `${this.path}/:key`,
-      verifyToken,
+      verifyAccessToken,
       this.imageController.getImage
     );
   }

@@ -3,11 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 import IRequestWithFileAndUser from '../interfaces/vendors/IRequestWithFileAndUser';
 import CustomError from '../utils/customError.utils';
 import validation from '../validations/user.validations';
-import Storage from '../utils/storage.utils';
 import userServices from '../services/user.services';
 
 class userController {
-  private storage = new Storage();
   private userServices = new userServices();
 
   public getUser = async (req: IRequestWithFileAndUser, res: Response) => {
@@ -45,11 +43,8 @@ class userController {
 
     operations.push(this.userServices.updateUser(id, uploadData));
     const response = await Promise.all(operations);
-    let dt = response[response.length - 1];
-    dt = dt?.toObject();
-    delete dt?.password;
-    delete dt?.__v;
-    res.json(dt);
+    const updateUserResponse = response[response.length - 1];
+    res.json(updateUserResponse);
   };
 }
 

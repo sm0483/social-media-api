@@ -38,9 +38,27 @@ class AuthControllers {
 
       id = response._id;
     }
-    const token = this.jwtOperations.createJwt({ id, userLogin });
+    const token = this.jwtOperations.createJwt(
+      { id, userLogin },
+      key.REFRESH_EXPIRES,
+      key.REFRESH_TOKEN_KEY
+    );
     this.authServices.attachCookie(token, res);
     res.redirect(key.CLIENT_URL);
+  };
+
+  public getAccessToken = async (
+    req: IRequestWithFileAndUser,
+    res: Response
+  ) => {
+    const id = req.user.id;
+    const accessToken = true;
+    const token = this.jwtOperations.createJwt(
+      { id, accessToken },
+      key.ACCESS_EXPIRES,
+      key.ACCESS_TOKEN_KEY
+    );
+    res.json({ accessToken: token });
   };
 }
 

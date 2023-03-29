@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import AuthController from '../controllers/auth.controllers';
 import { IRoute } from '../interfaces/vendors/IRoutes';
+import verifyRefreshToken from '../middlewares/verifyRefresh.middleware';
 
 class AuthRoute implements IRoute {
   public router: Router = Router();
-  public path: string = '/auth';
+  public path = '/auth';
   public authController: AuthController = new AuthController();
   constructor() {
     this.initRoutes();
@@ -15,6 +16,11 @@ class AuthRoute implements IRoute {
     this.router.get(
       `${this.path}/google/callback`,
       this.authController.callbackAuth
+    );
+    this.router.get(
+      `${this.path}/access-token`,
+      verifyRefreshToken,
+      this.authController.getAccessToken
     );
   }
 }

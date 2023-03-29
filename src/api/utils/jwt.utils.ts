@@ -1,17 +1,16 @@
 import jwt from 'jsonwebtoken';
-import tokenConfig from '../../config/key.config';
 
 class JwtOperation {
-  public createJwt(payload: object): string {
-    const token = jwt.sign({ payload }, tokenConfig.TOKEN_KEY, {
-      expiresIn: tokenConfig.EXPIRES,
+  public createJwt(payload: object, expiresIn: string, key: string): string {
+    const token = jwt.sign({ payload }, key, {
+      expiresIn: expiresIn,
     });
     return token;
   }
 
-  public isTokenValid(token: string): boolean | object {
+  public isTokenValid(token: string, key: string): boolean | object {
     try {
-      const response = jwt.verify(token, tokenConfig.TOKEN_KEY);
+      const response = jwt.verify(token, key);
       return response;
     } catch (err) {
       return false;

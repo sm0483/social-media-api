@@ -37,11 +37,13 @@ class userServices {
   };
 
   public updateUser = async (id: string, data: object) => {
-    const newData = await User.findOneAndUpdate({ _id: id }, data, {
+    let newData = await User.findOneAndUpdate({ _id: id }, data, {
       new: true,
       runValidators: true,
     });
-
+    newData = newData?.toObject();
+    delete newData?.password;
+    delete newData?.__v;
     return newData;
   };
 }

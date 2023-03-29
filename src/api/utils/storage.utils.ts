@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import storage from '../config/storage.config';
 import CustomError from './customError.utils';
-import { v4 as uuid } from 'uuid';
 import keys from '../../config/key.config';
 import fs from 'fs';
 import { Readable } from 'stream';
