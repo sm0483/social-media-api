@@ -1,4 +1,6 @@
-interface IUser {
+import { Document } from 'mongoose';
+
+interface IUser extends Document {
   name: string;
   email: string;
   password: string;
@@ -6,11 +8,6 @@ interface IUser {
   place: string;
   jobDescription: string;
   profileImage: string;
-}
-
-interface IUserResponse extends IUser {
-  _id: string;
-  _v: number;
 }
 
 interface IAuthUser {
@@ -24,4 +21,4 @@ interface IAuthUser {
   locale: string;
 }
 
-export { IAuthUser, IUser, IUserResponse };
+export { IAuthUser, IUser };
