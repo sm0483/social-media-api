@@ -22,6 +22,12 @@ class AuthRoute implements IRoute {
       verifyRefreshToken,
       this.authController.getAccessToken
     );
+
+    this.router.post(
+      `${this.path}/logout`,
+      verifyRefreshToken,
+      this.authController.logOutUser
+    );
   }
 }
 

@@ -66,6 +66,13 @@ class AuthControllers {
       await this.authServices.createConnect(id);
     res.json({ accessToken: token });
   };
+
+  public logOutUser = async (req: IRequestWithFileAndUser, res: Response) => {
+    const id = req.user.id;
+    if (!id) throw new CustomError('id not present', StatusCodes.UNAUTHORIZED);
+    res.clearCookie('refreshToken');
+    res.json({ accessToken: '', message: 'Logged out successfully' });
+  };
 }
 
 export default AuthControllers;
