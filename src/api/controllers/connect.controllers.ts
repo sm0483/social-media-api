@@ -4,17 +4,15 @@ import { StatusCodes } from 'http-status-codes';
 import Connect from '../models/connect.models';
 import CustomError from '../utils/customError.utils';
 import { IConnect } from '../interfaces/models/connect.interface';
-import mongoose from 'mongoose';
-import validate from '../validations/follow.validations';
 import ConnectServices from '../services/connect.services';
 
 class ConnectController {
   private connectServices: ConnectServices = new ConnectServices();
   public followUser = async (req: IRequestWithFileAndUser, res: Response) => {
     const id: string = req.user.id;
-    const { error } = validate.validateFollow(req.body);
-    if (error) throw new CustomError(error.message, StatusCodes.BAD_REQUEST);
-    const followData: { follow: mongoose.Schema.Types.ObjectId } = req.body;
+    const followId: string = req.params.followId;
+    if (!followId)
+      throw new CustomError('followId not found', StatusCodes.BAD_REQUEST);
     if (!id) throw new CustomError('id not found', StatusCodes.UNAUTHORIZED);
     const connect: IConnect | null = await this.connectServices.findConnect(id);
     if (!connect)
@@ -24,21 +22,18 @@ class ConnectController {
       );
 
     if (
-      await this.connectServices.isFollowed(
-        connect.following,
-        followData.follow
-      )
+      await this.connectServices.isFollowed(connect.following, followId as any)
     )
       throw new CustomError('User already following', StatusCodes.BAD_REQUEST);
 
     const upload = await this.connectServices.updateConnect(
       true,
       id,
-      followData
+      followId as any
     );
     if (!upload[1]) {
       upload[1] = await Connect.create({
-        userId: followData.follow,
+        userId: followId,
         followers: [id],
       });
     }
@@ -47,9 +42,10 @@ class ConnectController {
 
   public removeFollow = async (req: IRequestWithFileAndUser, res: Response) => {
     const id: string = req.user.id;
-    const { error } = validate.validateFollow(req.body);
-    if (error) throw new CustomError(error.message, StatusCodes.BAD_REQUEST);
-    const followData: { follow: mongoose.Schema.Types.ObjectId } = req.body;
+    const followId: string = req.params.followId;
+    if (!followId)
+      throw new CustomError('follow id not present', StatusCodes.BAD_REQUEST);
+
     if (!id) throw new CustomError('id not found', StatusCodes.UNAUTHORIZED);
     const connect: IConnect | null = await this.connectServices.findConnect(id);
     if (!connect)
@@ -61,7 +57,7 @@ class ConnectController {
     if (
       !(await this.connectServices.isFollowed(
         connect.following,
-        followData.follow
+        followId as any
       ))
     )
       throw new CustomError(
@@ -72,7 +68,7 @@ class ConnectController {
     const upload = await this.connectServices.updateConnect(
       false,
       id,
-      followData
+      followId as any
     );
     res.status(StatusCodes.OK).json(upload[0]);
   };

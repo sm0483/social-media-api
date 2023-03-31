@@ -14,12 +14,12 @@ class ConnectRoute implements IRoute {
 
   private initRoutes() {
     this.router.patch(
-      `${this.path}/follow`,
+      `${this.path}/follow/:followId`,
       verifyAccessToken,
       this.connectController.followUser
     );
     this.router.patch(
-      `${this.path}/remove-follow`,
+      `${this.path}/remove-follow/:followId`,
       verifyAccessToken,
       this.connectController.removeFollow
     );

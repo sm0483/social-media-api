@@ -16,21 +16,21 @@ class ConnectServices {
   updateConnect = async (
     operation: boolean,
     id: string,
-    followData: { follow: mongoose.Schema.Types.ObjectId }
+    followId: mongoose.Schema.Types.ObjectId
   ) => {
     return await Promise.all([
       Connect.findOneAndUpdate(
         { userId: id },
-        { [operation ? '$push' : '$pull']: { following: followData.follow } },
+        { [operation ? '$push' : '$pull']: { following: followId } },
         { new: true, runValidators: true }
       ),
       Connect.findOneAndUpdate(
-        { userId: followData.follow },
+        { userId: followId },
         { [operation ? '$push' : '$pull']: { followers: id } },
         { new: true, runValidators: true }
       ),
       User.findOneAndUpdate(
-        { _id: followData.follow },
+        { _id: followId },
         { $inc: { followerCount: operation ? 1 : -1 } }
       ),
     ]);
