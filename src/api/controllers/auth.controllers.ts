@@ -7,10 +7,12 @@ import JwtOperation from '../utils/jwt.utils';
 import AuthServices from '../services/auth.services';
 import { ParsedQs } from 'qs';
 import key from '../../config/key.config';
+import ConnectServices from '../services/connect.services';
 
 class AuthControllers {
   private jwtOperations = new JwtOperation();
   private authServices = new AuthServices();
+  private connectServices = new ConnectServices();
 
   public redirectAuth = async (req: IRequestWithFileAndUser, res: Response) => {
     const url: string = await this.authServices.getUrl();
@@ -52,12 +54,16 @@ class AuthControllers {
     res: Response
   ) => {
     const id = req.user.id;
+    if (!id) throw new CustomError('id not present', StatusCodes.UNAUTHORIZED);
     const accessToken = true;
     const token = this.jwtOperations.createJwt(
       { id, accessToken },
       key.ACCESS_EXPIRES,
       key.ACCESS_TOKEN_KEY
     );
+
+    if (!(await this.connectServices.findConnect(id)))
+      await this.authServices.createConnect(id);
     res.json({ accessToken: token });
   };
 }

@@ -4,6 +4,7 @@ import User from '../models/user.models';
 import CustomError from '../utils/customError.utils';
 import { StatusCodes } from 'http-status-codes';
 import { Response } from 'express';
+import Connect from '../models/connect.models';
 
 class AuthServices {
   public getUrl = () => {
@@ -54,7 +55,9 @@ class AuthServices {
     });
   };
 
-
+  public createConnect = async (userId: string) => {
+    return await Connect.create({ userId, followers: [], following: [] });
+  };
 }
 
 export default AuthServices;
