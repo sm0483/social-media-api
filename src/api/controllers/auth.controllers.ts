@@ -64,14 +64,16 @@ class AuthControllers {
 
     if (!(await this.connectServices.findConnect(id)))
       await this.authServices.createConnect(id);
-    res.json({ accessToken: token });
+    res.status(StatusCodes.OK).json({ accessToken: token });
   };
 
   public logOutUser = async (req: IRequestWithFileAndUser, res: Response) => {
     const id = req.user.id;
     if (!id) throw new CustomError('id not present', StatusCodes.UNAUTHORIZED);
     res.clearCookie('refreshToken');
-    res.json({ accessToken: '', message: 'Logged out successfully' });
+    res
+      .status(StatusCodes.OK)
+      .json({ accessToken: '', message: 'Logged out successfully' });
   };
 }
 

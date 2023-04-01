@@ -44,7 +44,7 @@ class userController {
     operations.push(this.userServices.updateUser(id, uploadData));
     const response = await Promise.all(operations);
     const updateUserResponse = response[response.length - 1];
-    res.json(updateUserResponse);
+    res.status(StatusCodes.OK).json(updateUserResponse);
   };
 }
 
