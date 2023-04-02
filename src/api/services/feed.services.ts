@@ -35,9 +35,40 @@ class FeedService {
           },
         },
       },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userDetails',
+        },
+      },
+      { $unwind: '$userDetails' },
+      {
+        $project: {
+          'userDetails.name': 1,
+          'userDetails._id': 1,
+          'userDetails.profileImage': 1,
+          likes: 1,
+          postImage: 1,
+          location: 1,
+          description: 1,
+          isFollowing: 1,
+          isLiked: 1,
+        },
+      },
     ]);
     return posts;
   };
 }
 
+// "_id": "642693246885bb11d8f7358f",
+// "userId": "64268ce4c5f32e2ca8f92407",
+// "likes": 0,
+// "postImage": "http://127.0.0.1:5000/api/v1/images/140cca0c-4a0f-49cd-b47b-a635dc24a586",
+// "location": "New Jersey",
+// "description": "A bustling metropolis on the East Coast of the United States",
+// "__v": 0,
+// "isFollowing": false,
+// "isLiked": false,
 export default FeedService;

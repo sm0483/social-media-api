@@ -6,9 +6,10 @@ import CustomError from '../utils/customError.utils';
 import PostServices from '../services/post.services';
 import { v4 as uid } from 'uuid';
 import keyConfig from '../../config/key.config';
-
+import FeedServices from '../services/feed.services';
 class PostController {
   private postServices = new PostServices();
+  private feedServices = new FeedServices();
 
   public createPost = async (req: IRequestWithFileAndUser, res: Response) => {
     const data = req.body.data && JSON.parse(req.body.data);
@@ -39,7 +40,20 @@ class PostController {
     const userId = req.user.id;
     if (!userId)
       throw new CustomError('Token not valid', StatusCodes.UNAUTHORIZED);
-    const posts = await this.postServices.getPosts(userId);
+    const page: number = parseInt(req.query.page as string) || 1;
+    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
+    const skip: number = (page - 1) * pageSize;
+
+    if (!userId) throw new CustomError('User not found', StatusCodes.NOT_FOUND);
+    const connect = await this.feedServices.findConnect(userId);
+    const liked = await this.feedServices.findLiked(userId);
+    const posts = await this.postServices.getPosts(
+      userId,
+      connect,
+      (liked as any).postId,
+      skip,
+      pageSize
+    );
     res.status(StatusCodes.OK).json(posts);
   };
   public deletePost = async (req: IRequestWithFileAndUser, res: Response) => {
