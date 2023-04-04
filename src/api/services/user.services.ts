@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import Storage from '../utils/storage.utils';
 import keyConfig from '../../config/key.config';
 import { v4 as uid } from 'uuid';
+import Connect from '../models/connect.models';
 
 class userServices {
   private storage = new Storage();
@@ -45,6 +46,35 @@ class userServices {
     delete newData?.password;
     delete newData?.__v;
     return newData;
+  };
+
+  public getUsers = async (
+    page: number,
+    skip: number,
+    pageSize: number,
+    userId: string
+  ) => {
+    const connections = await Connect.findOne({ userId });
+    const following = connections.following;
+    const users = await User.aggregate([
+      {
+        $match: {
+          _id: { $nin: [userId, ...following] },
+        },
+      },
+      { $skip: skip },
+      { $limit: pageSize },
+      { $sort: { createdAt: -1 } },
+      { $addFields: { isFollowing: false } },
+      {
+        $project: {
+          password: 0,
+          __v: 0,
+          email: 0,
+        },
+      },
+    ]);
+    return users;
   };
 }
 

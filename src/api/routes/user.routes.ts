@@ -25,6 +25,11 @@ class AuthRoute implements IRoute {
       upload.single('profileImage'),
       this.userController.editUser
     );
+    this.router.get(
+      `${this.path}/all`,
+      verifyAccessToken,
+      this.userController.getUsers
+    );
   }
 }
 

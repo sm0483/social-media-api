@@ -46,6 +46,22 @@ class userController {
     const updateUserResponse = response[response.length - 1];
     res.status(StatusCodes.OK).json(updateUserResponse);
   };
+
+  getUsers = async (req: IRequestWithFileAndUser, res: Response) => {
+    const userId = req.user.id;
+    if (!userId)
+      throw new CustomError('Invalid Token', StatusCodes.UNAUTHORIZED);
+    const page: number = parseInt(req.query.page as string) || 1;
+    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
+    const skip: number = (page - 1) * pageSize;
+    const users = await this.userServices.getUsers(
+      page,
+      skip,
+      pageSize,
+      userId
+    );
+    res.status(StatusCodes.OK).json(users);
+  };
 }
 
 export default userController;
