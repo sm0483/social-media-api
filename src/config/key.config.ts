@@ -20,4 +20,5 @@ export default {
   ACCESS_EXPIRES: process.env.ACCESS_EXPIRES,
   REFRESH_TOKEN_KEY: process.env.REFRESH_TOKEN_KEY,
   ACCESS_TOKEN_KEY: process.env.ACCESS_TOKEN_KEY,
+  NODE_ENV: process.env.NODE_ENV,
 };

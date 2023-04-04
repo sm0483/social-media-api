@@ -1,3 +1,4 @@
+import IndexRoute from './api/routes/index.routes';
 import AuthRoutes from './api/routes/auth.routes';
 import UserRoutes from './api/routes/user.routes';
 import ImageRoutes from './api/routes/image.routes';
@@ -9,6 +10,7 @@ import App from './app';
 
 const app = new App(
   [
+    new IndexRoute(),
     new AuthRoutes(),
     new UserRoutes(),
     new ImageRoutes(),
@@ -20,3 +22,5 @@ const app = new App(
   '/api/v1/'
 );
 app.listen();
+
+export default app.getApp();

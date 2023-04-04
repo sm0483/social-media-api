@@ -50,9 +50,16 @@ class App {
   };
 
   public listen = () => {
-    this.app.listen(this.port, () =>
-      console.error(`connected to port ${this.port}`)
-    );
+    this.app.listen(this.port, () => {
+      if (key.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.log(`connected to port ${this.port}`);
+      }
+    });
+  };
+
+  public getApp = () => {
+    return this.app;
   };
 }
 

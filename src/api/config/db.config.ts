@@ -3,11 +3,16 @@ import key from '../../config/key.config';
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(key.MONGO_URI);
-    console.log(`MongoDB Connected`);
+    await mongoose.connect(key.MONGO_URI);
+    if (key.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.log('MongoDB connected');
+    }
   } catch (err) {
     console.error(err);
   }
 };
+
+
 
 export default connectDB;
