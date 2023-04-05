@@ -7,6 +7,7 @@ import ConnectRoutes from './api/routes/connect.routes';
 import FeedRoute from './api/routes/feed.routes';
 import LikeRoute from './api/routes/like.routes';
 import App from './app';
+import keyConfig from './config/key.config';
 
 const app = new App(
   [
@@ -21,6 +22,7 @@ const app = new App(
   ],
   '/api/v1/'
 );
-app.listen();
+
+if (keyConfig.NODE_ENV !== 'test') app.listen();
 
 export default app.getApp();

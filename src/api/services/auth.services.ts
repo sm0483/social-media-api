@@ -7,6 +7,7 @@ import { Response } from 'express';
 import Connect from '../models/connect.models';
 
 class AuthServices {
+  
   public getUrl = () => {
     const url = auth.generateAuthUrl({
       access_type: 'offline',

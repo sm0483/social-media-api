@@ -10,9 +10,9 @@ import key from '../../config/key.config';
 import ConnectServices from '../services/connect.services';
 
 class AuthControllers {
-  private jwtOperations = new JwtOperation();
-  private authServices = new AuthServices();
-  private connectServices = new ConnectServices();
+  public jwtOperations = new JwtOperation();
+  public authServices = new AuthServices();
+  public connectServices = new ConnectServices();
 
   public redirectAuth = async (req: IRequestWithFileAndUser, res: Response) => {
     const url: string = await this.authServices.getUrl();
