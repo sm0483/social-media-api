@@ -7,6 +7,7 @@ import PostServices from '../services/post.services';
 import { v4 as uid } from 'uuid';
 import keyConfig from '../../config/key.config';
 import FeedServices from '../services/feed.services';
+
 class PostController {
   private postServices = new PostServices();
   private feedServices = new FeedServices();
@@ -43,13 +44,12 @@ class PostController {
     const page: number = parseInt(req.query.page as string) || 1;
     const pageSize: number = parseInt(req.query.pageSize as string) || 10;
     const skip: number = (page - 1) * pageSize;
-
     if (!userId) throw new CustomError('User not found', StatusCodes.NOT_FOUND);
     const connect = await this.feedServices.findConnect(userId);
-    const liked = await this.feedServices.findLiked(userId);
+    const liked: unknown = await this.feedServices.findLiked(userId);
     const posts = await this.postServices.getPosts(
       userId,
-      connect,
+      connect as any,
       (liked as any).postId,
       skip,
       pageSize
@@ -63,6 +63,29 @@ class PostController {
     if (!postId)
       throw new CustomError('post id not present', StatusCodes.BAD_REQUEST);
     const posts = await this.postServices.deletePost(postId, req.user.id);
+    res.status(StatusCodes.OK).json(posts);
+  };
+
+  public getPostByUserId = async (
+    req: IRequestWithFileAndUser,
+    res: Response
+  ) => {
+    const userId = req.params.userId;
+    const id = req.user.id;
+    if (!id) throw new CustomError('Token not valid', StatusCodes.UNAUTHORIZED);
+    if (!userId) throw new CustomError('User not found', StatusCodes.NOT_FOUND);
+    const page: number = parseInt(req.query.page as string) || 1;
+    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
+    const skip: number = (page - 1) * pageSize;
+    const connect = await this.feedServices.findConnect(id);
+    const liked = await this.feedServices.findLiked(id);
+    const posts = await this.postServices.getPostByUserId(
+      connect,
+      (liked as any).postId,
+      skip,
+      pageSize,
+      userId
+    );
     res.status(StatusCodes.OK).json(posts);
   };
 }

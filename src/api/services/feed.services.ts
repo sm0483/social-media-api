@@ -5,26 +5,30 @@ import mongoose from 'mongoose';
 
 class FeedService {
   public findConnect = async (userId: string) => {
-    let connect = await Connect.findOne({ userId });
-    if (!connect) connect = { followers: [], following: [] } as any;
+    let connect: unknown = await Connect.findOne({ userId });
+    if (!connect) connect = { followers: [], following: [] };
     return connect;
   };
 
   public findLiked = async (userId: string) => {
     let liked: unknown = await Like.findOne({ userId });
-    if (!liked) liked = (liked as any).postId = [];
+    if (!liked) liked = { postId: [] };
     return liked;
   };
 
   public getFeed = async (
-    connect: { following: any[] },
+    connect: any,
     postId: any[],
     skip: number,
     pageSize: number
   ) => {
     const posts = await Post.aggregate([
       { $sample: { size: 10 } },
-      { $addFields: { isFollowing: { $in: ['$userId', connect.following] } } },
+      {
+        $addFields: {
+          isFollowing: { $in: ['$userId', connect.following] },
+        },
+      },
       { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: pageSize },

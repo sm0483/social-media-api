@@ -16,7 +16,7 @@ class FeedController {
     if (!userId) throw new CustomError('User not found', StatusCodes.NOT_FOUND);
     const connect = await this.feedService.findConnect(userId);
     const liked = await this.feedService.findLiked(userId);
-    
+
     const posts = await this.feedService.getFeed(
       connect,
       (liked as any).postId,

@@ -30,6 +30,11 @@ class PostRoute implements IRoute {
       verifyAccessToken,
       this.postController.deletePost
     );
+    this.router.get(
+      `${this.path}/:userId`,
+      verifyAccessToken,
+      this.postController.getPostByUserId
+    );
   }
 }
 
