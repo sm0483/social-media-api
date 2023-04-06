@@ -14,7 +14,9 @@ class ImageController {
     if (!imageStream) {
       throw new CustomError('Image not found', StatusCodes.NOT_FOUND);
     }
+
     if (imageStream instanceof Readable) {
+      res.set('Content-Type', 'image/jpeg');
       imageStream.pipe(res);
     }
   };

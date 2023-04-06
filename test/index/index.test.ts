@@ -2,7 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
 import app from '../../src/index';
 
-const server = app.listen(3000);
+const port = 5000;
+const server: any = app.listen(port);
 
 afterAll(() => {
   server.close();

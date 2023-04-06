@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll  ",
+    "test": "jest",
     "lint:watch": "eslint-watch src/**/*.ts",
     "start": "npx tsc && node dist/index.js",
     "dev": "nodemon src/index.ts",

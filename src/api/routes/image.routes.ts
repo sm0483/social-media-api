@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import ImageController from '../controllers/image.controller';
 import { IRoute } from '../interfaces/vendors/IRoutes';
-import verifyToken from '../middlewares/verifyTokenImage.middlewares';
+import verifyToken from '../middlewares/imgTokenVerify.middlewares';
 
 class AuthRoute implements IRoute {
   public router: Router = Router();
