@@ -5,6 +5,8 @@ import keys from '../../config/key.config';
 import fs from 'fs';
 import { Readable } from 'stream';
 import { DeleteObjectOutput } from 'aws-sdk/clients/s3';
+import { GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { blob } from 'aws-sdk/clients/codecommit';
 
 class Storage {
   public async uploadImage(
@@ -13,15 +15,13 @@ class Storage {
   ): Promise<string | CustomError> {
     try {
       const readStream = fs.createReadStream(path);
-      const response = await storage
-        .upload({
-          Bucket: keys.S3_BUCKET_NAME,
-          Key: key,
-          Body: readStream,
-        })
-        .promise();
+      await storage.putObject({
+        Bucket: keys.S3_BUCKET_NAME,
+        Key: key,
+        Body: readStream,
+      });
       fs.unlinkSync(path);
-      return response.Key;
+      return key;
     } catch (err) {
       throw new CustomError(err.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -29,16 +29,17 @@ class Storage {
 
   // download image from s3
 
-  public async readImage(key: string): Promise<Readable | CustomError> {
+  public async readImage(
+    key: string
+  ): Promise<Readable | CustomError | ReadableStream | blob> {
     try {
-      const response = storage
-        .getObject({
+      const response = await storage.send(
+        new GetObjectCommand({
           Key: key,
           Bucket: keys.S3_BUCKET_NAME,
         })
-        .createReadStream();
-
-      return response;
+      );
+      return response.Body;
     } catch (err) {
       throw new CustomError(err.message, StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -49,12 +50,12 @@ class Storage {
     key: string
   ): Promise<DeleteObjectOutput | CustomError> {
     try {
-      const response = await storage
-        .deleteObject({
+      const response = await storage.send(
+        new DeleteObjectCommand({
           Bucket: keys.S3_BUCKET_NAME,
           Key: key,
         })
-        .promise();
+      );
 
       return response;
     } catch (err) {
