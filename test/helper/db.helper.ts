@@ -1,36 +1,22 @@
 import mongoose from 'mongoose';
-import key from '../../src/config/key.config';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-const connectDb = async () => {
-  try {
-    await mongoose.connect(key.MONGO_URI as string);
-    if (key.NODE_ENV !== 'test') {
-      // eslint-disable-next-line no-console
-      console.log('MongoDB connected');
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
+class DbHelper {
+  public mongoServer: MongoMemoryServer;
+  public connectDb = async () => {
+    this.mongoServer = await MongoMemoryServer.create();
+    const mongoUri = this.mongoServer.getUri();
+    await mongoose.connect(mongoUri);
+  };
 
-const closeDb = async () => {
-  try {
-    await mongoose.connection.close();
-    if (key.NODE_ENV !== 'test') {
-      // eslint-disable-next-line no-console
-      console.log('MongoDB disconnected');
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const clearDb = async () => {
-  try {
+  public clearDb = async () => {
     await mongoose.connection.db.dropDatabase();
-  } catch (err) {
-    console.error(err);
-  }
-};
+  };
 
-export default { closeDb, connectDb, clearDb };
+  public closeDb = async () => {
+    await mongoose.disconnect();
+    await mongoose.connection.close();
+  };
+}
+
+export default DbHelper;

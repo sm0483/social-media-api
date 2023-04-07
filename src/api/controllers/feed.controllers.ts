@@ -17,6 +17,7 @@ class FeedController {
     const connect = await this.feedService.findConnect(userId);
     const liked = await this.feedService.findLiked(userId);
 
+
     const posts = await this.feedService.getFeed(
       connect,
       (liked as any).postId,

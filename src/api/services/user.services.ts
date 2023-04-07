@@ -5,6 +5,7 @@ import Storage from '../utils/storage.utils';
 import keyConfig from '../../config/key.config';
 import { v4 as uid } from 'uuid';
 import Connect from '../models/connect.models';
+import mongoose from 'mongoose';
 
 class userServices {
   private storage = new Storage();
@@ -55,11 +56,18 @@ class userServices {
     userId: string
   ) => {
     const connections = await Connect.findOne({ userId });
-    const following = connections.following;
+    const user = new mongoose.Types.ObjectId(userId);
+    let following = [];
+    if (connections) following = connections.following;
     const users = await User.aggregate([
       {
         $match: {
-          _id: { $nin: [userId, ...following] },
+          _id: {
+            $nin: [
+              user,
+              following.map((id) => new mongoose.Types.ObjectId(id)),
+            ],
+          },
         },
       },
       { $skip: skip },

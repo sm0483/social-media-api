@@ -46,7 +46,7 @@ class App {
   };
 
   private initDb = async () => {
-    await connectDb();
+    key.NODE_ENV !== 'test' && await connectDb();
   };
 
   public listen = () => {

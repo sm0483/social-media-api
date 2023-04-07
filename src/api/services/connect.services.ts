@@ -13,7 +13,7 @@ class ConnectServices {
     return following.includes(id);
   };
 
-  updateConnect = async (
+  public updateConnect = async (
     operation: boolean,
     id: string,
     followId: mongoose.Schema.Types.ObjectId
@@ -34,6 +34,10 @@ class ConnectServices {
         { $inc: { followerCount: operation ? 1 : -1 } }
       ),
     ]);
+  };
+
+  public createConnect = async (userId: string) => {
+    return await Connect.create({ userId, followers: [], following: [] });
   };
 }
 

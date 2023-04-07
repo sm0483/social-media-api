@@ -1,13 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
-import db from '../helper/db.helper';
 import createServer from '../helper/server.helper';
 
 const server = createServer();
 
 afterAll(async () => {
-  await db.closeDb();
-  server.close();
+  await server.close();
 });
 
 describe('API availability test', () => {

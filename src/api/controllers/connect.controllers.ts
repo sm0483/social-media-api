@@ -14,13 +14,8 @@ class ConnectController {
     if (!followId)
       throw new CustomError('followId not found', StatusCodes.BAD_REQUEST);
     if (!id) throw new CustomError('id not found', StatusCodes.UNAUTHORIZED);
-    const connect: IConnect | null = await this.connectServices.findConnect(id);
-    if (!connect)
-      throw new CustomError(
-        'Internal server issue try to login',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
-
+    let connect: IConnect | null = await this.connectServices.findConnect(id);
+    if (!connect) connect = await this.connectServices.createConnect(id);
     if (
       await this.connectServices.isFollowed(connect.following, followId as any)
     )

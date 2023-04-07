@@ -66,13 +66,4 @@ class FeedService {
   };
 }
 
-// "_id": "642693246885bb11d8f7358f",
-// "userId": "64268ce4c5f32e2ca8f92407",
-// "likes": 0,
-// "postImage": "http://127.0.0.1:5000/api/v1/images/140cca0c-4a0f-49cd-b47b-a635dc24a586",
-// "location": "New Jersey",
-// "description": "A bustling metropolis on the East Coast of the United States",
-// "__v": 0,
-// "isFollowing": false,
-// "isLiked": false,
 export default FeedService;

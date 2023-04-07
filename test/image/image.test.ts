@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
-import db from '../helper/db.helper';
+import DbHelper from '../helper/db.helper';
 import ImageHelper from '../helper/saveImage.helper';
 import AuthHelper from '../helper/auth.helper';
 import userData from '../data/user.data';
@@ -10,8 +10,10 @@ const server = createServer();
 
 let token: string;
 let imageId: any;
+const db = new DbHelper();
 
 beforeAll(async () => {
+  await db.connectDb();
   const imageHelper = new ImageHelper();
   const authHelper = new AuthHelper();
   token = await authHelper.createUserAccessToken(userData.user1);

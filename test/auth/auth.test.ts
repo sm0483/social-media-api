@@ -1,26 +1,27 @@
 import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
-import db from '../helper/db.helper';
+import DbHelper from '../helper/db.helper';
 import AuthHelper from '../helper/auth.helper';
 import userData from '../data/user.data';
 import createServer from '../helper/server.helper';
 
-
-const server= createServer();
+const server = createServer();
 let token: string;
+const db = new DbHelper();
 
 beforeAll(async () => {
+  await db.connectDb();
   const authHelper = new AuthHelper();
   token = await authHelper.createUserRefreshToken(userData.user1);
 });
 
 afterAll(async () => {
+  server.close();
   await db.clearDb();
   await db.closeDb();
-  await server.close();
 });
 
-describe('Test the redirectAuth route', () => {
+describe('Test the auth route', () => {
   test('should redirect to the auth URL', async () => {
     const response = await supertest(server).get('/api/v1/auth/google');
     expect(response.status).toBe(StatusCodes.MOVED_TEMPORARILY);
