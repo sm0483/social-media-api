@@ -28,7 +28,7 @@ class App {
   }
 
   private initMiddleware = () => {
-    this.app.use(morgan('dev'));
+    key.NODE_ENV !== 'test' && this.app.use(morgan('dev'));
     this.app.use(cors());
     this.app.use(cookieParser());
     this.app.use(express.json());

@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
-import app from '../../src/index';
+import db from '../helper/db.helper';
+import createServer from '../helper/server.helper';
 
-const port = 8100;
-const server: any = app.listen(port);
+const server = createServer();
 
-afterAll(() => {
+afterAll(async () => {
+  await db.closeDb();
   server.close();
 });
 

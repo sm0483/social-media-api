@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
-import app from '../../src/index';
+import db from '../helper/db.helper';
+import createServer from '../helper/server.helper';
 
-const port = 5000;
-const server: any = app.listen(port);
+const server = createServer();
 
-afterAll(() => {
+afterAll(async () => {
+  await db.closeDb();
   server.close();
 });
 
@@ -13,5 +14,10 @@ describe('API availability test', () => {
   test('API should respond with a 200 status code', async () => {
     const indexResponse = await supertest(server).get('/api/v1/');
     expect(indexResponse.status).toBe(StatusCodes.OK);
+  });
+
+  test('The API should return a 404 status code when accessing an invalid endpoint', async () => {
+    const indexResponse = await supertest(server).get('/api/v1/random-path');
+    expect(indexResponse.status).toBe(StatusCodes.NOT_FOUND);
   });
 });
