@@ -4,9 +4,11 @@ import CustomError from './customError.utils';
 import keys from '../../config/key.config';
 import fs from 'fs';
 import { Readable } from 'stream';
-import { DeleteObjectOutput } from 'aws-sdk/clients/s3';
-import { GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { blob } from 'aws-sdk/clients/codecommit';
+import {
+  GetObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectOutput,
+} from '@aws-sdk/client-s3';
 
 class Storage {
   public async uploadImage(
@@ -31,7 +33,7 @@ class Storage {
 
   public async readImage(
     key: string
-  ): Promise<Readable | CustomError | ReadableStream | blob> {
+  ): Promise<Readable | CustomError | ReadableStream | Blob> {
     try {
       const response = await storage.send(
         new GetObjectCommand({
