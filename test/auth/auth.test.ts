@@ -21,13 +21,13 @@ afterAll(async () => {
   await db.closeDb();
 });
 
-describe('Test the auth route', () => {
+describe('Test suite for auth route', () => {
   test('should redirect to the auth URL', async () => {
     const response = await supertest(server).get('/api/v1/auth/google');
     expect(response.status).toBe(StatusCodes.MOVED_TEMPORARILY);
   });
 
-  test('it should a give a accessToken in response', async () => {
+  test('It should a give a accessToken in response', async () => {
     const response = await supertest(server)
       .get('/api/v1/auth/access-token')
       .set('Cookie', `refreshToken=${token}`);
@@ -35,7 +35,7 @@ describe('Test the auth route', () => {
     expect(response.body).toHaveProperty('accessToken');
   });
 
-  test('should return an error when provided with an invalid refreshToken', async () => {
+  test('Should return an error when provided with an invalid refreshToken', async () => {
     const response = await supertest(server)
       .get('/api/v1/auth/access-token')
       .set('Cookie', `refreshToken=${token}+x`);

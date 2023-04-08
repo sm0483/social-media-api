@@ -37,8 +37,8 @@ afterAll(async () => {
   await db.closeDb();
 });
 
-describe('Test post route', () => {
-  test('should fail due not data present a new post', async () => {
+describe('Test suite for  post route', () => {
+  test('Should fail due not data present a new post', async () => {
     const response = await supertest(server)
       .post('/api/v1/posts')
       .set('authorization', `Bearer ${token}`);
@@ -67,7 +67,7 @@ describe('Test post route', () => {
     expect(response.body).toHaveProperty('error');
   });
 
-  test('Get all post should be success ', async () => {
+  test('Get all posts operation should succeed ', async () => {
     const response = await supertest(server)
       .get('/api/v1/posts')
       .set('authorization', `Bearer ${token}`);
@@ -81,14 +81,14 @@ describe('Test post route', () => {
     expect(response.body).toHaveProperty('error');
   });
 
-  test('Delete post should be successful', async () => {
+  test('Delete post operation should be succeed', async () => {
     const response = await supertest(server)
       .delete(`/api/v1/posts/${postId}`)
       .set('authorization', `Bearer ${token}`);
     expect(response.status).toBe(StatusCodes.OK);
   });
 
-  test('Get post by userId should be successful', async () => {
+  test('Get post by userId should be succeed', async () => {
     const response = await supertest(server)
       .get(`/api/v1/posts/${userId}`)
       .set('authorization', `Bearer ${token}`);

@@ -14,7 +14,7 @@ describe('API availability test', () => {
     expect(indexResponse.status).toBe(StatusCodes.OK);
   });
 
-  test('The API should return a 404 status code when accessing an invalid endpoint', async () => {
+  test('API should return a 404 status code when accessing an invalid endpoint', async () => {
     const indexResponse = await supertest(server).get('/api/v1/random-path');
     expect(indexResponse.status).toBe(StatusCodes.NOT_FOUND);
   });

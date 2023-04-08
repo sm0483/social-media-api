@@ -15,4 +15,9 @@ export default {
     place: 'some-place',
     jobDescription: 'some-description',
   },
+  user4: {
+    name: 'test4',
+    email: 'test3@gmail.com',
+    profileImage: 'https://www/google.com/image3',
+  },
 };

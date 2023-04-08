@@ -33,15 +33,15 @@ afterAll(async () => {
   server.close();
 });
 
-describe('Test the like ', () => {
-  test('should be successfully like post', async () => {
+describe('Test suite for  like route', () => {
+  test('Should be successfully like post', async () => {
     const response = await supertest(server)
       .patch(`/api/v1/likes/like/${postId}`)
       .set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(StatusCodes.OK);
   });
 
-  test('should be fail like post', async () => {
+  test('Like post operation should fail', async () => {
     await supertest(server)
       .patch(`/api/v1/likes/like/${postId}`)
       .set('Authorization', `Bearer ${token1}`);
@@ -53,7 +53,7 @@ describe('Test the like ', () => {
     expect(response.body).toHaveProperty('error');
   });
 
-  test('should be remove like from  post', async () => {
+  test('Should be remove like from  post', async () => {
     await supertest(server)
       .patch(`/api/v1/likes/like/${postId}`)
       .set('Authorization', `Bearer ${token}`);
@@ -63,7 +63,7 @@ describe('Test the like ', () => {
     expect(response.status).toBe(StatusCodes.OK);
   });
 
-  test('should not be remove like from post', async () => {
+  test('Remove like from post operation should fail', async () => {
     await supertest(server)
       .patch(`/api/v1/likes/like/${postId}`)
       .set('Authorization', `Bearer ${token}`);

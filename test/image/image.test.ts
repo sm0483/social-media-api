@@ -26,8 +26,8 @@ afterAll(async () => {
   await server.close();
 });
 
-describe('Test the image retrieval route', () => {
-  test('should retrieve an image with the correct content type', async () => {
+describe('Test suite form image route', () => {
+  test('Should retrieve an image with the correct content type', async () => {
     const response = await supertest(server).get(
       `/api/v1/images/${imageId}?token=${token}`
     );
@@ -36,7 +36,7 @@ describe('Test the image retrieval route', () => {
     expect(response.status).toBe(StatusCodes.OK);
   });
 
-  test('should return an error when provided with an invalid AccessToken', async () => {
+  test('Should return an error when provided with an invalid AccessToken', async () => {
     const response = await supertest(server).get(
       `/api/v1/images/${imageId}?token=${token}+x`
     );

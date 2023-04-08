@@ -63,10 +63,7 @@ class userServices {
       {
         $match: {
           _id: {
-            $nin: [
-              user,
-              following.map((id) => new mongoose.Types.ObjectId(id)),
-            ],
+            $nin: [user, ...following],
           },
         },
       },

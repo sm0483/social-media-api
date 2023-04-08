@@ -52,7 +52,7 @@ describe('Test suite for the follow route', () => {
     expect(response.body).toHaveProperty('error');
   });
 
-  test('remove follow from followed user', async () => {
+  test('Remove follow from followed user', async () => {
     await supertest(server)
       .patch(`/api/v1/follows/follow/${userId}`)
       .set('Authorization', `Bearer ${token}`);
