@@ -8,17 +8,19 @@ import DbHelper from '../helper/db.helper';
 import path from 'path';
 import UserHelper from '../helper/createUser.helper';
 import PostHelper from '../helper/post.helper';
+import TokenHelper from '../helper/token.helper';
 
 const server = createServer();
 let token: string;
 let postId: string;
 let userId: string;
+let token1: string;
 
 beforeAll(async () => {
   const db = new DbHelper();
   await db.connectDb();
   const userHelper = new UserHelper();
-
+  const tokenHelper = new TokenHelper();
   const authHelper = new AuthHelper();
   token = await authHelper.createUserAccessToken(userData.user1);
   userId = await userHelper.createUser(userData.user2);
@@ -28,6 +30,7 @@ beforeAll(async () => {
     userId,
     postImage: 'some radom string',
   });
+  token1 = tokenHelper.createTokenAccess(userId, true);
 });
 
 afterAll(async () => {
@@ -84,7 +87,9 @@ describe('Test suite for  post route', () => {
   test('Delete post operation should be succeed', async () => {
     const response = await supertest(server)
       .delete(`/api/v1/posts/${postId}`)
-      .set('authorization', `Bearer ${token}`);
+      .set('authorization', `Bearer ${token1}`);
+      expect(response.body.userId).toBe(userId.toString());
+      expect(response.body._id).toBe(postId.toString());
     expect(response.status).toBe(StatusCodes.OK);
   });
 

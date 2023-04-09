@@ -9,7 +9,9 @@
     "lint:watch": "eslint-watch src/**/*.ts",
     "start": "npx tsc && node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "install-prod": "npm install --only=production"
+
   },
   "keywords": [
     "node",

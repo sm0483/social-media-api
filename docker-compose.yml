@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: socila-media-api
+    ports:
+      - "${APP_PORT}:${PORT}"
+    restart: always
+    volumes:
+      - .:/api
+    environment:
+      NODE_ENV: ${NODE_ENV}
