@@ -47,6 +47,7 @@ describe('Test suite for user route', () => {
     expect(response.body.some((user: any) => user.name !== name)).toBe(true);
     expect(Array.isArray(response.body)).toBe(true);
   });
+  
   test('Verify that all users except following users are returned', async () => {
     await supertest(server)
       .patch(`/api/v1/follows/follow/${userId}`)
@@ -95,6 +96,20 @@ describe('Test suite for user route', () => {
       .patch('/api/v1/users/')
       .set('authorization', `Bearer ${token}`)
       .attach('profileImage', postImagePath);
+    expect(response.status).toBe(StatusCodes.OK);
+  });
+
+  test('Get user by user id', async () => {
+    await supertest(server)
+      .patch(`/api/v1/follows/follow/${userId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    const response = await supertest(server)
+      .get(`/api/v1/users/${userId}`)
+      .set('authorization', `Bearer ${token}`);
+    expect(response.body._id).toBe(userId.toString());
+    expect(response.body.isFollowing).toBe(true);
+    expect(response.body.followerCount).toBe(1);
     expect(response.status).toBe(StatusCodes.OK);
   });
 });

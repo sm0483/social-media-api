@@ -81,6 +81,33 @@ class userServices {
     ]);
     return users;
   };
+
+  public getUserByUserId = async (userId: string, searchUserId: string) => {
+    const connections = await Connect.findOne({ userId });
+    const searchId = new mongoose.Types.ObjectId(searchUserId);
+    let following = [];
+    if (connections) following = connections.following;
+    const user = await User.aggregate([
+      {
+        $match: {
+          _id: searchId,
+        },
+      },
+      {
+        $addFields: {
+          isFollowing: { $in: ['$_id', following] },
+        },
+      },
+      {
+        $project: {
+          password: 0,
+          __v: 0,
+          email: 0,
+        },
+      },
+    ]);
+    return user[0];
+  };
 }
 
 export default userServices;

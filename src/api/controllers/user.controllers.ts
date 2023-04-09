@@ -47,7 +47,7 @@ class userController {
     res.status(StatusCodes.OK).json(updateUserResponse);
   };
 
-  getUsers = async (req: IRequestWithFileAndUser, res: Response) => {
+  public getUsers = async (req: IRequestWithFileAndUser, res: Response) => {
     const userId = req.user.id;
     if (!userId)
       throw new CustomError('Invalid Token', StatusCodes.UNAUTHORIZED);
@@ -61,6 +61,20 @@ class userController {
       userId
     );
     res.status(StatusCodes.OK).json(users);
+  };
+
+  public getUserByUserId = async (
+    req: IRequestWithFileAndUser,
+    res: Response
+  ) => {
+    const searchUserId = req.params.searchUserId;
+    const userId = req.user.id;
+    if (!searchUserId)
+      throw new CustomError('No user id present', StatusCodes.BAD_REQUEST);
+    if (!userId)
+      throw new CustomError('User not found', StatusCodes.UNAUTHORIZED);
+    const user = await this.userServices.getUserByUserId(userId, searchUserId);
+    res.status(StatusCodes.OK).json(user);
   };
 }
 

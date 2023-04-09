@@ -30,6 +30,12 @@ class AuthRoute implements IRoute {
       verifyAccessToken,
       this.userController.getUsers
     );
+
+    this.router.get(
+      `${this.path}/:searchUserId`,
+      verifyAccessToken,
+      this.userController.getUserByUserId
+    );
   }
 }
 
