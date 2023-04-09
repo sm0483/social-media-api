@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import CustomError from '../utils/customError.utils';
 import LikeService from '../services/like.services';
+import mongoose from 'mongoose';
 
 class LikeController {
   private likeService: LikeService = new LikeService();
@@ -21,7 +22,13 @@ class LikeController {
       await this.likeService.createLike(userId);
     }
     const response = await this.likeService.addLike(userId, postId);
-    res.status(StatusCodes.OK).json(response);
+    const id = new mongoose.Types.ObjectId(postId);
+    if (!response[0].postId.includes(id as any))
+      throw new CustomError('Post not liked', StatusCodes.BAD_REQUEST);
+    res.status(StatusCodes.OK).json({
+      message: 'Post liked successfully',
+      status: StatusCodes.OK,
+    });
   };
 
   public removeLike = async (req: IRequestWithFileAndUser, res: Response) => {
@@ -40,7 +47,13 @@ class LikeController {
       throw new CustomError('Post not liked', StatusCodes.BAD_REQUEST);
     }
     const response = await this.likeService.removeLike(userId, postId);
-    res.status(StatusCodes.OK).json(response);
+    const id = new mongoose.Types.ObjectId(postId);
+    if (response[0].postId.includes(id as any))
+      throw new CustomError('Post not liked', StatusCodes.BAD_REQUEST);
+    res.status(StatusCodes.OK).json({
+      message: 'Like removed successfully',
+      status: StatusCodes.OK,
+    });
   };
 }
 

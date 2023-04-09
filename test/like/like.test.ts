@@ -38,6 +38,8 @@ describe('Test suite for  like route', () => {
     const response = await supertest(server)
       .patch(`/api/v1/likes/like/${postId}`)
       .set('Authorization', `Bearer ${token}`);
+    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('status');
     expect(response.status).toBe(StatusCodes.OK);
   });
 
@@ -53,13 +55,16 @@ describe('Test suite for  like route', () => {
     expect(response.body).toHaveProperty('error');
   });
 
-  test('Should be remove like from  post', async () => {
+  test('Should  remove like from  post', async () => {
     await supertest(server)
       .patch(`/api/v1/likes/like/${postId}`)
       .set('Authorization', `Bearer ${token}`);
     const response = await supertest(server)
       .patch(`/api/v1/likes/remove-like/${postId}`)
       .set('Authorization', `Bearer ${token}`);
+    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('status');
+    expect(response.body.message).toBe('Like removed successfully');
     expect(response.status).toBe(StatusCodes.OK);
   });
 

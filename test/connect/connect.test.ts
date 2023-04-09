@@ -35,9 +35,9 @@ describe('Test suite for the follow route', () => {
       .patch(`/api/v1/follows/follow/${userId}`)
       .set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(StatusCodes.OK);
-    expect(response.body).toHaveProperty('userId');
-    expect(response.body).toHaveProperty('following');
-    expect(response.body.following[0]).toBe(userId.toString());
+    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('status');
+    expect(response.body.message).toBe('Successfully followed');
   });
 
   test('Error when following already followed user', async () => {
@@ -61,6 +61,9 @@ describe('Test suite for the follow route', () => {
       .patch(`/api/v1/follows/remove-follow/${userId}`)
       .set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(StatusCodes.OK);
+    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('status');
+    expect(response.body.message).toBe('Successfully removed');
   });
 
   test('Error when removing not following user', async () => {

@@ -32,7 +32,10 @@ class ConnectController {
         followers: [id],
       });
     }
-    res.status(StatusCodes.OK).json(upload[0]);
+    res.status(StatusCodes.OK).json({
+      message: 'Successfully followed',
+      status: StatusCodes.OK,
+    });
   };
 
   public removeFollow = async (req: IRequestWithFileAndUser, res: Response) => {
@@ -60,12 +63,12 @@ class ConnectController {
         StatusCodes.BAD_REQUEST
       );
 
-    const upload = await this.connectServices.updateConnect(
-      false,
-      id,
-      followId as any
-    );
-    res.status(StatusCodes.OK).json(upload[0]);
+    await this.connectServices.updateConnect(false, id, followId as any);
+
+    res.status(StatusCodes.OK).json({
+      message: 'Successfully removed',
+      status: StatusCodes.OK,
+    });
   };
 }
 

@@ -88,8 +88,9 @@ describe('Test suite for  post route', () => {
     const response = await supertest(server)
       .delete(`/api/v1/posts/${postId}`)
       .set('authorization', `Bearer ${token1}`);
-      expect(response.body.userId).toBe(userId.toString());
-      expect(response.body._id).toBe(postId.toString());
+    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('status');
+    expect(response.body.message).toBe('Successfully deleted');
     expect(response.status).toBe(StatusCodes.OK);
   });
 

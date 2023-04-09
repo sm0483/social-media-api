@@ -62,8 +62,12 @@ class PostController {
       throw new CustomError('Token not valid', StatusCodes.UNAUTHORIZED);
     if (!postId)
       throw new CustomError('post id not present', StatusCodes.BAD_REQUEST);
-    const posts = await this.postServices.deletePost(postId, req.user.id);
-    res.status(StatusCodes.OK).json(posts);
+    const post = await this.postServices.deletePost(postId, req.user.id);
+    if (!post) throw new CustomError('Post not found', StatusCodes.NOT_FOUND);
+    res.status(StatusCodes.OK).json({
+      message: 'Successfully deleted',
+      status: StatusCodes.OK,
+    });
   };
 
   public getPostByUserId = async (
