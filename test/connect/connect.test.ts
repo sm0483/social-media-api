@@ -6,13 +6,14 @@ import AuthHelper from '../helper/auth.helper';
 import userData from '../data/user.data';
 import UserHelper from '../helper/createUser.helper';
 
-const server = createServer();
+let server: any;
 const db = new DbHelper();
 let token: string;
 let userId: string;
 
 beforeAll(async () => {
   await db.connectDb();
+  server = await createServer();
   const authHelper = new AuthHelper();
   const userHelper = new UserHelper();
   token = await authHelper.createUserAccessToken(userData.user1);
@@ -26,7 +27,7 @@ beforeEach(async () => {
 afterAll(async () => {
   await db.clearDb();
   await db.closeDb();
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('Test suite for the follow route', () => {

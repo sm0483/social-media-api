@@ -5,20 +5,21 @@ import AuthHelper from '../helper/auth.helper';
 import userData from '../data/user.data';
 import createServer from '../helper/server.helper';
 
-const server = createServer();
+let server: any;
 let token: string;
 const db = new DbHelper();
 
 beforeAll(async () => {
   await db.connectDb();
+  server = await createServer();
   const authHelper = new AuthHelper();
   token = await authHelper.createUserRefreshToken(userData.user1);
 });
 
 afterAll(async () => {
-  server.close();
   await db.clearDb();
   await db.closeDb();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('Test suite for auth route', () => {

@@ -8,12 +8,13 @@ import userData from '../data/user.data';
 import AuthHelper from '../helper/auth.helper';
 import UserHelper from '../helper/createUser.helper';
 
-const server = createServer();
+let server: any;
 const db = new DbHelper();
 let token: string;
 
 beforeAll(async () => {
   await db.connectDb();
+  server = await createServer();
   const postHelper = new PostHelper();
   const authHelper = new AuthHelper();
   const userHelper = new UserHelper();
@@ -27,7 +28,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await db.closeDb();
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('Test suite for feed route', () => {

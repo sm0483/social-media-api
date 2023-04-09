@@ -6,8 +6,10 @@ import userData from '../data/user.data';
 import AuthHelper from '../helper/auth.helper';
 import path from 'path';
 import UserHelper from '../helper/createUser.helper';
+import StorageMock from '../mocks/storage.mocks';
 
-const server = createServer();
+let server: any;
+const storageMock = new StorageMock();
 
 const db = new DbHelper();
 let token: string;
@@ -15,6 +17,7 @@ let userId: string;
 
 beforeAll(async () => {
   await db.connectDb();
+  server = await createServer();
   const authHelper = new AuthHelper();
   const userHelper = new UserHelper();
   token = await authHelper.createUserAccessToken(userData.user1);
@@ -25,7 +28,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await db.clearDb();
   await db.closeDb();
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('Test suite for user route', () => {
@@ -47,7 +50,7 @@ describe('Test suite for user route', () => {
     expect(response.body.some((user: any) => user.name !== name)).toBe(true);
     expect(Array.isArray(response.body)).toBe(true);
   });
-  
+
   test('Verify that all users except following users are returned', async () => {
     await supertest(server)
       .patch(`/api/v1/follows/follow/${userId}`)
@@ -88,6 +91,7 @@ describe('Test suite for user route', () => {
     expect(response.status).toBe(StatusCodes.OK);
     expect(response.body.place).toBe(userData.user3.place);
     expect(response.body.jobDescription).toBe(userData.user3.jobDescription);
+    expect(storageMock.uploadImageMock).toBeCalledTimes(1);
   });
 
   test("Update user's image via API endpoint", async () => {
@@ -97,6 +101,7 @@ describe('Test suite for user route', () => {
       .set('authorization', `Bearer ${token}`)
       .attach('profileImage', postImagePath);
     expect(response.status).toBe(StatusCodes.OK);
+    expect(storageMock.uploadImageMock).toBeCalledTimes(1);
   });
 
   test('Get user by user id', async () => {

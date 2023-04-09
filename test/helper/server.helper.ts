@@ -1,9 +1,10 @@
 import app from '../../src/index';
+import * as portFinder from 'portfinder';
 
-const createSever = () => {
-  const port = 3000;
-  const server: any = app.listen(port);
+const createServer = async () => {
+  const port = await portFinder.getPortPromise();
+  const server = app.listen(port);
   return server;
 };
 
-export default createSever;
+export default createServer;

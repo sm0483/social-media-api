@@ -39,3 +39,5 @@ dist/**/*
 
 script.py
 yarn.lock
+src/api/uploads/profileImage*
+src/api/uploads/postImage*

@@ -2,10 +2,14 @@ import { StatusCodes } from 'http-status-codes';
 import supertest from 'supertest';
 import createServer from '../helper/server.helper';
 
-const server = createServer();
+let server: any;
+
+beforeAll(async () => {
+  server = await createServer();
+});
 
 afterAll(async () => {
-  await server.close();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('API availability test', () => {

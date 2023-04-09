@@ -7,7 +7,7 @@ import AuthHelper from '../helper/auth.helper';
 import PostHelper from '../helper/post.helper';
 import postData from '../data/post.data';
 
-const server = createServer();
+let server: any;
 const db = new DbHelper();
 let token: string;
 let postId: string;
@@ -15,6 +15,7 @@ let token1: string;
 
 beforeAll(async () => {
   await db.connectDb();
+  server = await createServer();
   const authHelper = new AuthHelper();
   const postHelper = new PostHelper();
   token = await authHelper.createUserAccessToken(userData.user1);
@@ -30,7 +31,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await db.clearDb();
   await db.closeDb();
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('Test suite for  like route', () => {

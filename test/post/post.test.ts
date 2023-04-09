@@ -9,8 +9,11 @@ import path from 'path';
 import UserHelper from '../helper/createUser.helper';
 import PostHelper from '../helper/post.helper';
 import TokenHelper from '../helper/token.helper';
+import StorageMock from '../mocks/storage.mocks';
 
-const server = createServer();
+let server: any;
+const storageMock = new StorageMock();
+
 let token: string;
 let postId: string;
 let userId: string;
@@ -19,6 +22,7 @@ let token1: string;
 beforeAll(async () => {
   const db = new DbHelper();
   await db.connectDb();
+  server = await createServer();
   const userHelper = new UserHelper();
   const tokenHelper = new TokenHelper();
   const authHelper = new AuthHelper();
@@ -34,10 +38,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  server.close();
   const db = new DbHelper();
   await db.clearDb();
   await db.closeDb();
+  await new Promise((resolve) => server.close(resolve));
 });
 
 describe('Test suite for  post route', () => {
@@ -62,6 +66,7 @@ describe('Test suite for  post route', () => {
     expect(response.body).toHaveProperty('postImage');
     expect(response.body).toHaveProperty('location');
     expect(response.body).toHaveProperty('description');
+    expect(storageMock.uploadImageMock).toHaveBeenCalledTimes(1);
   });
 
   test('Get all post should be fail without token', async () => {
