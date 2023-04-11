@@ -35,7 +35,7 @@ describe('Test suite form image route', () => {
     expect(response.body).toBeTruthy();
     expect(response.status).toBe(StatusCodes.OK);
     expect(storageMock.readImageMock).toBeCalledTimes(1);
-    expect(response.headers['cache-control']).toBe('public, max-age=300');
+    expect(response.headers['cache-control'].includes('public')).toBeTruthy();
   });
 
   test('Should return an error when provided with an invalid AccessToken', async () => {

@@ -6,7 +6,7 @@ const setCache = (
   res: Response,
   next: NextFunction
 ) => {
-  const maxAge = 60 * 5;
+  const maxAge = 60 * 60 * 24;
   if (req.method === 'GET') {
     res.set('Cache-Control', `public, max-age=${maxAge}`);
   } else {
