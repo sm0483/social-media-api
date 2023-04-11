@@ -5,13 +5,12 @@ import AuthHelper from '../helper/auth.helper';
 import userData from '../data/user.data';
 import createServer from '../helper/server.helper';
 import StorageMock from '../mocks/storage.mocks';
-import { Server } from 'http';
 const storageMock = new StorageMock();
 
 let token: string;
 let imageId: any;
+let server: any;
 const db = new DbHelper();
-let server: Server;
 
 beforeAll(async () => {
   await db.connectDb();
@@ -22,11 +21,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await server.close();
   await db.clearDb();
   await db.closeDb();
+  await server.close();
 });
-
 
 describe('Test suite form image route', () => {
   test('Should retrieve an image with the correct content type', async () => {

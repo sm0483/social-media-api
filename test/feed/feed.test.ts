@@ -27,8 +27,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await db.clearDb();
   await db.closeDb();
-  await new Promise((resolve) => server.close(resolve));
+  await server.close();
 });
 
 describe('Test suite for feed route', () => {

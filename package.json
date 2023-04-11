@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": " jest ",
+    "test": "jest",
     "test:watch": "jest --watch --runInBand",
     "lint:watch": "eslint-watch src/**/*.ts",
     "start": "npx tsc && node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "build": "npx tsc",
-    "install-prod": "npm install --only=production"
+    "build": "npx tsc"
   },
   "keywords": [
     "node",

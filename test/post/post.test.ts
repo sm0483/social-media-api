@@ -18,9 +18,9 @@ let token: string;
 let postId: string;
 let userId: string;
 let token1: string;
+const db = new DbHelper();
 
 beforeAll(async () => {
-  const db = new DbHelper();
   await db.connectDb();
   server = await createServer();
   const userHelper = new UserHelper();
@@ -38,10 +38,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  const db = new DbHelper();
   await db.clearDb();
   await db.closeDb();
-  await new Promise((resolve) => server.close(resolve));
+  await server.close();
 });
 
 describe('Test suite for  post route', () => {

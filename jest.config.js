@@ -6,5 +6,6 @@ module.exports = {
   verbose: true,
   clearMocks: true,
   collectCoverage: true,
-  maxWorkers: '70%',
+  maxWorkers: '4',
+  coverageDirectory: 'coverage',
 };

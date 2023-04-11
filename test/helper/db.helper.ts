@@ -3,6 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
 class DbHelper {
   public mongoServer: MongoMemoryServer;
+
   public connectDb = async () => {
     this.mongoServer = await MongoMemoryServer.create();
     const mongoUri = this.mongoServer.getUri();
@@ -14,8 +15,9 @@ class DbHelper {
   };
 
   public closeDb = async () => {
-    await mongoose.disconnect();
     await mongoose.connection.close();
+    await mongoose.disconnect();
+    this.mongoServer.stop();
   };
 }
 
