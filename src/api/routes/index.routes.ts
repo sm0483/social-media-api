@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import IndexController from '../controllers/index.controllers';
 import { IRoute } from '../interfaces/vendors/IRoutes';
-import verifyRefreshToken from '../middlewares/verifyRefresh.middleware';
 
 class IndexRoute implements IRoute {
   public router: Router = Router();

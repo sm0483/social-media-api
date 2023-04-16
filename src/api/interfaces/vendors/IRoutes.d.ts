@@ -4,3 +4,4 @@ interface IRoute {
   router: Router;
   path: string;
 }
+

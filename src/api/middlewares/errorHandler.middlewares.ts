@@ -1,4 +1,5 @@
-import { Response, NextFunction } from 'express';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { NextFunction, Response } from 'express';
 import IRequestWithFileAndUser from '../interfaces/vendors/IRequestWithFileAndUser';
 import errorGuard from '../guards/error.guards';
 import CustomError from '../utils/customError.utils';

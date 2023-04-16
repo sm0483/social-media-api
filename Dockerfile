@@ -1,4 +1,6 @@
-FROM node:17-alpine
+# common build stage
+
+FROM node:17-alpine as common-build
 
 WORKDIR /app
 
@@ -11,20 +13,40 @@ COPY . .
 RUN npm run build
 
 
-FROM node:17-alpine
+# development stage
 
+FROM common-build as development-build
+
+ENV NODE_ENV development
+
+
+EXPOSE 5000
+
+CMD [ "npm", "run", "dev" ]
+
+
+# production stage
+
+FROM node:17-alpine as production-build
+
+ENV NODE_ENV production
 
 WORKDIR /app
 
-COPY --from=0 /app/package*.json .
-COPY --from=0 /app/.env .
+COPY --from=common-build /app/package*.json .
+COPY --from=common-build /app/.env .
 
 RUN npm install --only=production
+COPY --from=common-build /app/dist ./dist
 
-COPY --from=0 /app/dist ./dist
+RUN mkdir /app/dist/api/uploads
+RUN chown -R node:node /app/dist/api/uploads
+
 
 USER node
 
 EXPOSE 5000
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "npm", "start" ]
+
+

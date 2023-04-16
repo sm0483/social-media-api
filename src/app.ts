@@ -18,7 +18,7 @@ class App {
   public port: number;
 
   constructor(routes: any[], start: string) {
-    this.port = key.PORT as number;
+    this.port = key.PORT as unknown as number;
     this.app = express();
     this.start = start;
     this.initDb();
@@ -46,7 +46,7 @@ class App {
   };
 
   private initDb = async () => {
-    key.NODE_ENV !== 'test' && await connectDb();
+    key.NODE_ENV !== 'test' && (await connectDb());
   };
 
   public listen = () => {

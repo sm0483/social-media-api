@@ -4,4 +4,5 @@ dist
 coverage
 .eslintrc
 .prettierrc
+test
 jest.config.js
