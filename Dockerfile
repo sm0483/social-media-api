@@ -4,11 +4,11 @@ FROM node:17-alpine as common-build
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY . ./
 
 RUN npm run build
 
@@ -33,11 +33,11 @@ ENV NODE_ENV production
 
 WORKDIR /app
 
-COPY --from=common-build /app/package*.json .
-COPY --from=common-build /app/.env .
+COPY --from=common-build /app/package*.json ./
+COPY --from=common-build /app/.env ./
 
 RUN npm install --only=production
-COPY --from=common-build /app/dist ./dist
+COPY --from=common-build /app/dist ./dist/
 
 RUN mkdir /app/dist/api/uploads
 RUN chown -R node:node /app/dist/api/uploads
