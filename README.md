@@ -1,8 +1,7 @@
 # Social Media API
 
-[docker-workflow](https://github.com/sm0483/social-media-api/actions/workflows/docker-image.yml/badge.svg)
-
-[node-workflow](https://github.com/sm0483/social-media-api/actions/workflows/node.js.yml/badge.svg)
+[![Tests](https://github.com/sm0483/social-media-api/actions/workflows/node.js.yml/badge.svg)](https://github.com/sm0483/social-media-api/actions/workflows/node.js.yml)
+[![Build Image](https://github.com/sm0483/social-media-api/actions/workflows/docker-image.yml/badge.svg)](https://github.com/sm0483/social-media-api/actions/workflows/docker-image.yml)
 
 ## Overview
 
@@ -128,7 +127,7 @@ This API is tested using the following tools and frameworks:
 -   **Jest**: A testing framework used to write and run automated tests.
 -   **Supertest**: A library used in conjunction with Jest to test HTTP endpoints.
 
-To run the tests, use the following command: 
+To run the tests, use the following command:
 
 ```
 npm test
