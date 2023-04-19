@@ -32,6 +32,7 @@ class ConnectController {
         followers: [id],
       });
     }
+
     res.status(StatusCodes.OK).json({
       message: 'Successfully followed',
       status: StatusCodes.OK,
@@ -69,6 +70,20 @@ class ConnectController {
       message: 'Successfully removed',
       status: StatusCodes.OK,
     });
+  };
+
+  public getFollowers = async (req: IRequestWithFileAndUser, res: Response) => {
+    const id: string = req.user.id;
+    if (!id) throw new CustomError('id not found', StatusCodes.UNAUTHORIZED);
+    const followers = await this.connectServices.fetchFollowers(id);
+    res.status(StatusCodes.OK).json(followers);
+  };
+
+  public getFollowing = async (req: IRequestWithFileAndUser, res: Response) => {
+    const id: string = req.user.id;
+    if (!id) throw new CustomError('id not found', StatusCodes.UNAUTHORIZED);
+    const following = await this.connectServices.fetchFollowing(id);
+    res.status(StatusCodes.OK).json(following);
   };
 }
 

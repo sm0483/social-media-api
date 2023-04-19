@@ -23,6 +23,18 @@ class ConnectRoute implements IRoute {
       verifyAccessToken,
       this.connectController.removeFollow
     );
+
+    this.router.get(
+      `${this.path}/followers`,
+      verifyAccessToken,
+      this.connectController.getFollowers
+    );
+
+    this.router.get(
+      `${this.path}/following`,
+      verifyAccessToken,
+      this.connectController.getFollowing
+    );
   }
 }
 

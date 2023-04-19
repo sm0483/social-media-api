@@ -39,6 +39,68 @@ class ConnectServices {
   public createConnect = async (userId: string) => {
     return await Connect.create({ userId, followers: [], following: [] });
   };
+
+  public fetchFollowers = async (id: string) => {
+    const userId = new mongoose.Types.ObjectId(id);
+    const followersData = await Connect.aggregate([
+      { $match: { userId } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'followers',
+          foreignField: '_id',
+          as: 'followers',
+        },
+      },
+      {
+        $project: {
+          'followers._id': 1,
+          'followers.name': 1,
+          'followers.followerCount': 1,
+          'followers.place': 1,
+          'followers.jobDescription': 1,
+          'followers.profileImage': 1,
+          'followers.isFollowing': 1,
+        },
+      },
+    ]);
+
+    return (followersData as any)[0].followers;
+  };
+
+  public fetchFollowing = async (id: string) => {
+    const userId = new mongoose.Types.ObjectId(id);
+    const followingData = await Connect.aggregate([
+      { $match: { userId } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'following',
+          foreignField: '_id',
+          as: 'following',
+        },
+      },
+
+      {
+        $addFields: {
+          'following.isFollowing': true,
+        },
+      },
+      {
+        $project: {
+          'following._id': 1,
+          'following.name': 1,
+          'following.followerCount': 1,
+          'following.place': 1,
+          'following.jobDescription': 1,
+          'following.profileImage': 1,
+          'following.isFollowing': 1,
+        },
+      },
+    ]);
+
+    return (followingData as any)[0].following;
+  };
 }
 
 export default ConnectServices;
